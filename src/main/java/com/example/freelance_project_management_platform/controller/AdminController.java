@@ -12,13 +12,13 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users")
-public class UserController {
+@RequestMapping("/admin")
+public class AdminController {
 
     private final UserService userService;
 
     //! GET http://localhost:8081/api/v1/user/all
-    @GetMapping("/all")
+    @GetMapping("/users/all")
     public ResponseEntity<DefaultResponseDto> getAllUsers() {
         return ResponseEntity.ok(
                 new DefaultResponseDto(

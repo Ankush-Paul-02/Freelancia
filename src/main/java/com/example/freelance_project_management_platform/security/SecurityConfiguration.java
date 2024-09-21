@@ -1,5 +1,7 @@
 package com.example.freelance_project_management_platform.security;
 
+import com.example.freelance_project_management_platform.business.service.exceptions.AuthenticationEntryPointException;
+import com.example.freelance_project_management_platform.business.service.exceptions.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +18,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+import static com.example.freelance_project_management_platform.data.enums.Role.*;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
@@ -42,8 +45,27 @@ public class SecurityConfiguration {
                                         "/swagger-ui.html"
                                 )
                                 .permitAll()
+                                .requestMatchers("/admin/**")
+                                .hasAnyRole(ADMIN.name())
+                                .requestMatchers("/freelancer/**")
+                                .hasAnyRole(FREELANCER.name())
+                                .requestMatchers("/client/**")
+                                .hasAnyRole(CLIENT.name())
                                 .anyRequest()
                                 .authenticated()
+                )
+                .exceptionHandling(
+                        exceptionHandling -> exceptionHandling
+                                .authenticationEntryPoint(
+                                        (request, response, authException) -> {
+                                            throw new AuthenticationEntryPointException(authException.getMessage());
+                                        }
+                                )
+                                .accessDeniedHandler(
+                                        (request, response, accessDeniedException) -> {
+                                            throw new UnauthorizedException(accessDeniedException.getMessage());
+                                        }
+                                )
                 )
                 .sessionManagement(
                         session -> session

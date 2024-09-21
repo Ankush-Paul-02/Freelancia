@@ -1,9 +1,7 @@
 package com.example.freelance_project_management_platform.data.exceptions;
 
 import com.example.freelance_project_management_platform.business.dto.DefaultResponseDto;
-import com.example.freelance_project_management_platform.business.service.exceptions.InvalidInputException;
-import com.example.freelance_project_management_platform.business.service.exceptions.JWTException;
-import com.example.freelance_project_management_platform.business.service.exceptions.UserInfoException;
+import com.example.freelance_project_management_platform.business.service.exceptions.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -30,6 +28,18 @@ public class CustomControllerAdvisor {
     public ResponseEntity<DefaultResponseDto> handleJWTException(JWTException ex) {
         DefaultResponseDto response = new DefaultResponseDto(FAILED, ex.getMessage());
         return ResponseEntity.status(403).body(response);
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<DefaultResponseDto> handleUnauthorizedException(UnauthorizedException ex) {
+        DefaultResponseDto response = new DefaultResponseDto(FAILED, ex.getMessage());
+        return ResponseEntity.badRequest().body(response);
+    }
+
+    @ExceptionHandler(AuthenticationEntryPointException.class)
+    public ResponseEntity<DefaultResponseDto> handleAuthenticationEntryPointException(AuthenticationEntryPointException ex) {
+        DefaultResponseDto response = new DefaultResponseDto(FAILED, ex.getMessage());
+        return ResponseEntity.badRequest().body(response);
     }
 
     @ExceptionHandler(UserInfoException.class)

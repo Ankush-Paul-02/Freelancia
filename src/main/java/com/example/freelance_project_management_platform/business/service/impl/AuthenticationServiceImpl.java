@@ -8,7 +8,9 @@ import com.example.freelance_project_management_platform.business.service.EmailS
 import com.example.freelance_project_management_platform.business.service.exceptions.UserInfoException;
 import com.example.freelance_project_management_platform.data.enums.Role;
 import com.example.freelance_project_management_platform.data.enums.UserStatus;
+import com.example.freelance_project_management_platform.data.models.Roles;
 import com.example.freelance_project_management_platform.data.models.User;
+import com.example.freelance_project_management_platform.data.repositories.RolesRepository;
 import com.example.freelance_project_management_platform.data.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -30,6 +33,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
+    private final RolesRepository rolesRepository;
 
     @Override
     public User register(RegisterUserDto registerUserDto) {
@@ -37,11 +41,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (userOptional.isPresent()) {
             throw new UserInfoException("User with email " + registerUserDto.getEmail() + " already exists");
         }
+
+        if (!Role.FREELANCER.name().equals(registerUserDto.getRole()) && !Role.CLIENT.name().equals(registerUserDto.getRole())) {
+            throw new UserInfoException("Invalid role");
+        }
+
+        Optional<Roles> optionalRole = rolesRepository.findByName(Role.valueOf(registerUserDto.getRole()));
+        if (optionalRole.isEmpty()) {
+            throw new UserInfoException("Role does not exist");
+        }
+        Roles role = optionalRole.get();
+
         User user = User.builder()
                 .name(registerUserDto.getUsername())
                 .email(registerUserDto.getEmail())
                 .password(passwordEncoder.encode(registerUserDto.getPassword()))
-                .role(Role.valueOf(registerUserDto.getRole()))
+                .roles(Set.of(role))
                 .createdAt(System.currentTimeMillis())
                 .updatedAt(System.currentTimeMillis())
                 .status(UserStatus.ACTIVE)
