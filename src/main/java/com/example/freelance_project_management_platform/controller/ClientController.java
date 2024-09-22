@@ -69,4 +69,16 @@ public class ClientController {
                 )
         );
     }
+
+    //! http://localhost:8081/api/v1/client/project/{projectId}/status/{projectStatus}
+    @PutMapping("/project/{projectId}/status/{projectStatus}")
+    public ResponseEntity<DefaultResponseDto> updateProject(@PathVariable Long projectId, @PathVariable String projectStatus) {
+        return ResponseEntity.ok(
+                new DefaultResponseDto(
+                        SUCCESS,
+                        Map.of("project", projectService.updateProject(projectId, projectStatus)),
+                        "Project updated successfully"
+                )
+        );
+    }
 }

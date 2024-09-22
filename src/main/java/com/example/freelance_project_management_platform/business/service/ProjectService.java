@@ -10,4 +10,6 @@ public interface ProjectService {
     ProjectResponseDto createProject(CreateProjectRequestDto createProjectRequestDto);
 
     List<ProjectResponseDto> getAllProjectByClient();
+
+    ProjectResponseDto updateProject(Long projectId, String projectStatus);
 }

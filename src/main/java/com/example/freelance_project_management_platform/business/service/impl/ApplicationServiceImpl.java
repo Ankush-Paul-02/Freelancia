@@ -4,7 +4,9 @@ import com.example.freelance_project_management_platform.business.dto.Applicatio
 import com.example.freelance_project_management_platform.business.dto.ApplicationRequestDto;
 import com.example.freelance_project_management_platform.business.service.ApplicationService;
 import com.example.freelance_project_management_platform.business.service.AuthenticationService;
+import com.example.freelance_project_management_platform.business.service.EmailService;
 import com.example.freelance_project_management_platform.business.service.exceptions.UserInfoException;
+import com.example.freelance_project_management_platform.data.enums.ProjectStatus;
 import com.example.freelance_project_management_platform.data.enums.Role;
 import com.example.freelance_project_management_platform.data.models.Applications;
 import com.example.freelance_project_management_platform.data.models.Project;
@@ -27,6 +29,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
     private final AuthenticationService authenticationService;
+    private final EmailService emailService;
 
     @Override
     public ApplicationDto submitApplication(ApplicationRequestDto applicationRequestDto) {
@@ -76,9 +79,22 @@ public class ApplicationServiceImpl implements ApplicationService {
         if (optionalApplications.isEmpty()) {
             throw new UserInfoException("Application not found with id: " + applicationId);
         }
-        Applications applications = optionalApplications.get();
-        applications.setIsAccepted(true);
-        Applications savedApplication = applicationsRepository.save(applications);
+        Applications application = optionalApplications.get();
+        application.setIsAccepted(true);
+
+        Project applicationProject = application.getProject();
+        applicationProject.setFreelancer(application.getFreelancer());
+        applicationProject.setProjectStatus(ProjectStatus.IN_PROGRESS);
+        projectRepository.save(applicationProject);
+
+        Applications savedApplication = applicationsRepository.save(application);
+
+        emailService.sendEmail(
+                savedApplication.getFreelancer().getEmail(),
+                "Application Update - Application ID: " + savedApplication.getId(),
+                "Your application for the project " + savedApplication.getProject().getTitle() + " has been accepted."
+        );
+
         return ApplicationDto.applicationToApplicationDto(savedApplication);
     }
 
