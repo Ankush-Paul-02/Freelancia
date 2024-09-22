@@ -1,5 +1,7 @@
 package com.example.freelance_project_management_platform.data.models;
 
+import com.example.freelance_project_management_platform.data.enums.Skill;
+import com.example.freelance_project_management_platform.data.enums.TechnologyStack;
 import com.example.freelance_project_management_platform.data.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -51,6 +53,39 @@ public class User extends BaseEntity implements UserDetails {
     private Boolean enabled;
 
     private LocalDateTime verificationCodeExpirationTime;
+
+    //! Freelancer fields
+
+    //? Freelancer skills
+    @Enumerated(EnumType.STRING)
+    private Set<Skill> skills = new HashSet<>();
+
+    //? Freelancer technology stack
+    @Enumerated(EnumType.STRING)
+    private Set<TechnologyStack> technologyStacks = new HashSet<>();
+
+    //? Freelancer experience in years
+    private Integer experience;
+
+    //? Freelancer rating
+    private Double rating;
+
+    //? Freelancer availability
+    private Boolean isAvailable;
+
+    //? Freelancer hourly rate
+    private Double hourlyRate;
+
+    //! Client fields
+
+    //? Client company name
+    private String companyName;
+
+    //? Client projects posted
+    private Integer projectsPosted;
+
+    //? Client rating
+    private Double clientRating;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+import static com.example.freelance_project_management_platform.business.dto.DefaultResponseDto.Status.SUCCESS;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin")
@@ -22,7 +24,7 @@ public class AdminController {
     public ResponseEntity<DefaultResponseDto> getAllUsers() {
         return ResponseEntity.ok(
                 new DefaultResponseDto(
-                        DefaultResponseDto.Status.SUCCESS,
+                        SUCCESS,
                         Map.of("users", userService.getAllUsers()),
                         "All users fetched successfully"
                 )

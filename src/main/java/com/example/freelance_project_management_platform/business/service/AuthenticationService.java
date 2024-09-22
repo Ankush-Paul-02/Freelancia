@@ -14,4 +14,6 @@ public interface AuthenticationService {
     void verifyUser(VerifyUserDto verifyUserDto);
 
     void resendVerificationCode(String email);
+
+    User getAuthenticatedUser();
 }
