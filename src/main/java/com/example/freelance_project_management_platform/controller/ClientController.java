@@ -3,7 +3,9 @@ package com.example.freelance_project_management_platform.controller;
 import com.example.freelance_project_management_platform.business.dto.CreateProjectRequestDto;
 import com.example.freelance_project_management_platform.business.dto.DefaultResponseDto;
 import com.example.freelance_project_management_platform.business.service.ApplicationService;
+import com.example.freelance_project_management_platform.business.service.ProjectOrderService;
 import com.example.freelance_project_management_platform.business.service.ProjectService;
+import com.razorpay.RazorpayException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ public class ClientController {
 
     private final ProjectService projectService;
     private final ApplicationService applicationService;
+    private final ProjectOrderService projectOrderService;
 
     //! http://localhost:8081/api/v1/client/project/create
     @PostMapping("/project/create")
@@ -78,6 +81,30 @@ public class ClientController {
                         SUCCESS,
                         Map.of("project", projectService.updateProject(projectId, projectStatus)),
                         "Project updated successfully"
+                )
+        );
+    }
+
+    //! http://localhost:8081/api/v1/client/project/{projectId}/order
+    @PostMapping("/project/{projectId}/order")
+    public ResponseEntity<DefaultResponseDto> createProjectOrder(@PathVariable Long projectId) throws RazorpayException {
+        return ResponseEntity.ok(
+                new DefaultResponseDto(
+                        SUCCESS,
+                        Map.of("projectOrder", projectOrderService.createProjectOrder(projectId)),
+                        "Project order created successfully"
+                )
+        );
+    }
+
+    //! http://localhost:8081/api/v1/client/payment/callback
+    @PostMapping("/payment/callback")
+    public ResponseEntity<DefaultResponseDto> handlePaymentCallback(@RequestBody Map<String, String> payload) throws RazorpayException {
+        return ResponseEntity.ok(
+                new DefaultResponseDto(
+                        SUCCESS,
+                        Map.of("payment", projectOrderService.handlePaymentCallback(payload)),
+                        "Payment handled successfully"
                 )
         );
     }
