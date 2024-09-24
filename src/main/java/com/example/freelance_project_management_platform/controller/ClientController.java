@@ -6,6 +6,7 @@ import com.example.freelance_project_management_platform.business.service.Applic
 import com.example.freelance_project_management_platform.business.service.ProjectOrderService;
 import com.example.freelance_project_management_platform.business.service.ProjectService;
 import com.razorpay.RazorpayException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class ClientController {
 
     //! http://localhost:8081/api/v1/client/project/create
     @PostMapping("/project/create")
-    public ResponseEntity<DefaultResponseDto> createProject(@RequestBody CreateProjectRequestDto project) {
+    public ResponseEntity<DefaultResponseDto> createProject(@Valid @RequestBody CreateProjectRequestDto project) {
         return ResponseEntity.ok(
                 new DefaultResponseDto(
                         SUCCESS,

@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -40,8 +41,8 @@ public class ProjectServiceImpl implements ProjectService {
                 .client(authenticatedUser)
                 .freelancer(null)
                 .applications(new HashSet<>())
-                .startDate(createProjectRequestDto.getStartDate())
-                .endDate(createProjectRequestDto.getEndDate())
+                .startDate(LocalDateTime.parse(createProjectRequestDto.getStartDate()))
+                .endDate(LocalDateTime.parse(createProjectRequestDto.getEndDate()))
                 .budget(createProjectRequestDto.getBudget())
                 .projectStatus(ProjectStatus.PENDING)
                 .createdAt(System.currentTimeMillis())
