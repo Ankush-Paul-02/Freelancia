@@ -4,6 +4,7 @@ import com.example.freelance_project_management_platform.business.dto.DefaultRes
 import com.example.freelance_project_management_platform.business.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ import java.util.Map;
 
 import static com.example.freelance_project_management_platform.business.dto.DefaultResponseDto.Status.SUCCESS;
 
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin")

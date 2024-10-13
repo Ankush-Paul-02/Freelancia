@@ -11,6 +11,7 @@ import java.util.Map;
 
 import static com.example.freelance_project_management_platform.business.dto.DefaultResponseDto.Status.SUCCESS;
 
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/freelancer")
