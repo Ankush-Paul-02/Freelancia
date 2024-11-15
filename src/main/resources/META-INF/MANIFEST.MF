@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: com.example.freelance_project_management_platform.FreelanceP
+ rojectManagementPlatformApplication
+

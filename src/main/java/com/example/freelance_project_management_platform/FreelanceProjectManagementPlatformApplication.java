@@ -9,5 +9,4 @@ public class FreelanceProjectManagementPlatformApplication {
     public static void main(String[] args) {
         SpringApplication.run(FreelanceProjectManagementPlatformApplication.class, args);
     }
-
 }
