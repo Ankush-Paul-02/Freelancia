@@ -1,14 +1,26 @@
-# Use the official OpenJDK 17 image from Docker Hub
-FROM openjdk:17
+FROM maven:3.8.4-openjdk-17 AS build
 
-#Set working directory inside the container
+# Set the working direactory
 WORKDIR /app
 
-#Copy the compiled Java application Jar file into the container
-COPY ./target/Freelance_Project_Management_Platform-0.0.1-SNAPSHOT.jar /app
+# Copy the pom.xml file and download the dependencies
+COPY pom.xml .
+RUN mvn dependency:go-offline
 
-#Expose the port the spring boot application will run on
-EXPOSE 8080
+# Copy the source code and build the application
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-#Command to run the application
-CMD ["java", "-jar", "Freelance_Project_Management_Platform-0.0.1-SNAPSHOT.jar"]
+# Use an official OpenJDK runtime as a parent image
+FROM openjdk:17-jdk-alpine
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the JAR file from the build stage to the runtime image
+COPY --from=build /app/target/Freelance_Project_Management_Platform-0.0.1-SNAPSHOT.jar .
+
+EXPOSE 8081
+
+# Specify the command to run on container start
+ENTRYPOINT ["java", "-jar", "/app/Freelance_Project_Management_Platform-0.0.1-SNAPSHOT.jar"]

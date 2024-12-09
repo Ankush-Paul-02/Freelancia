@@ -16,7 +16,7 @@ import static com.example.freelance_project_management_platform.business.dto.Def
 @CrossOrigin
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin")
+@RequestMapping("/api/v1/admin")
 public class AdminController {
 
     private final UserService userService;

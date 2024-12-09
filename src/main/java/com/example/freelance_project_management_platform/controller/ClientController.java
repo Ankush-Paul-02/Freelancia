@@ -20,7 +20,7 @@ import static com.example.freelance_project_management_platform.business.dto.Def
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/client")
+@RequestMapping("/api/v1/client")
 public class ClientController {
 
     private final ProjectService projectService;

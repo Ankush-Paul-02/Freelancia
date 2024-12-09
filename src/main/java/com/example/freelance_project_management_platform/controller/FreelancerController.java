@@ -14,7 +14,7 @@ import static com.example.freelance_project_management_platform.business.dto.Def
 @CrossOrigin
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/freelancer")
+@RequestMapping("/api/v1/freelancer")
 public class FreelancerController {
 
     private final ApplicationService applicationService;

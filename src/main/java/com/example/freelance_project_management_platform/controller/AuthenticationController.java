@@ -16,7 +16,7 @@ import static com.example.freelance_project_management_platform.business.dto.Def
 @CrossOrigin
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth")
+@RequestMapping("/api/v1/auth")
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
